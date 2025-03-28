@@ -67,9 +67,77 @@ curl -X POST \
 
 ## Output
 
+
 Generated graphs will be saved in the `output_graphs/` directory:
 - `{name}_line_graph.png`
 - `{name}_bar_chart.png`
 - `{name}_heatmap.png`
 
+# Distress and Proximity Visualization API
+
+## Overview
+
+This Flask-based API generates a layered graph that visualizes the relationship between distress predictions and relative proximity data over time. The application processes two CSV files: one with distress prediction data and one with proximity data, and then creates a graph with the following layers:
+- **Distress Predictions** (plotted as red scatter points).
+- **Relative Distance** (plotted as a green line).
+
+## Requirements
+
+- Python 3.8+
+- Required Python Packages:
+  - Flask
+  - Pandas
+  - Matplotlib
+  - ast
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dailyactivitylab/InfantDistressClassification.git
+   cd InfantDistressClassification
+   
+2. Install Dependencies
+   pip install -r requirements.txt
+
+### Usage
+
+#### Running the API
+
+```bash
+python app.py
+
+### The API will start on `http://localhost:5000`.
+
+## Endpoint: `/generate-graph`
+
+**Method**: POST
+
+### Parameters:
+
+- `file1`: CSV file containing distress prediction data with columns `Second`, `Label`, and `Prediction`.
+- `file2`: CSV file containing proximity data with columns `r` (range) and `time` (optional).
+
+### CSV File Format:
+
+#### Distress Prediction Data (file1):
+- Must contain columns `Second` (timestamp), `Label` (distress/non-distress), and `Prediction`.
+
+#### Proximity Data (file2):
+- Must contain column `r` with relative distance (range) information.
+
+### Example Request (using curl)
+
+```bash
+curl -X POST \
+  -F "file1=@/path/to/distress_predictions.csv" \
+  -F "file2=@/path/to/proximity_data.csv" \
+  http://localhost:5000/generate-graph
+
+### Output
+
+Generated graphs will be saved in the `output_graphs/` directory:
+- `layered_graph.png`
+
+This file will contain the layered graph that combines distress predictions and relative distance.
 
